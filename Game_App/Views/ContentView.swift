@@ -13,9 +13,7 @@ struct ContentView: View {
             VStack(spacing: 20) {
                 
                 Text("Wood Game!")
-                    .font(.title)
-                    .fontWeight(.heavy)
-                    .foregroundColor(Color("AccentColor"))
+                    .customTitle()
                 
                 Text("Are you ready to test your wood skills?!")
                     .font(.headline)
