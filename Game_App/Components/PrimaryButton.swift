@@ -12,7 +12,7 @@ struct PrimaryButton: View {
     var background: Color = Color("AccentColor")
     
     var body: some View {
-        Text("Next")
+        Text(text)
             .foregroundColor(.white)
             .padding()
             .padding(.horizontal)
