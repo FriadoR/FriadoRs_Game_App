@@ -9,21 +9,28 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack(spacing: 40) {
-            VStack(spacing: 20) {
+        NavigationStack {
+            VStack(spacing: 40) {
+                VStack(spacing: 20) {
+                    
+                    Text("Wood Game!")
+                        .customTitle()
+                    
+                    Text("Are you ready to test your wood skills?!")
+                        .font(.headline)
+                        .foregroundColor(Color("AccentColor"))
+                }
                 
-                Text("Wood Game!")
-                    .customTitle()
+                NavigationLink {
+                    WoodView()
+                } label: {
+                    PrimaryButton(text: "Start Game!") }
                 
-                Text("Are you ready to test your wood skills?!")
-                    .font(.headline)
-                    .foregroundColor(Color("AccentColor"))
             }
-            PrimaryButton(text: "Start Game!")
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .ignoresSafeArea(.all)
+            .background(Color(red: 38/255, green: 92/255, blue: 75/255)) // Color(hex: "#265C4B")
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .ignoresSafeArea(.all)
-        .background(Color(red: 38/255, green: 92/255, blue: 75/255)) // Color(hex: "#265C4B")
     }
 }
 
