@@ -24,8 +24,18 @@ struct QuestionView: View {
             ProgressBar(progress: 10)
             
             VStack(alignment: .leading, spacing: 20) {
-                Text("")
+                Text("What is the most challenging monster in the Dungeons &amp; Dragons 5th Edition Monster Manual?")
+                    .font(.system(size: 20))
+                    .bold()
+                    .foregroundColor(Color(hue: 1.0, saturation: 0.0, brightness: 0.661))
+                
+                AnswerRow(answer: Answer(text: "false", isCorrect: true))
+                AnswerRow(answer: Answer(text: "true", isCorrect: false))
             }
+            
+            PrimaryButton(text: "Next")
+            
+            Spacer()
             
         }
         .padding()
