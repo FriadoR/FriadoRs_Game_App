@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		6FAC29852D5CB182008A8EBB /* Game_App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Game_App.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6FAC29852D5CB182008A8EBB /* Wood Game.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Wood Game.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -40,7 +40,7 @@
 		6FAC29862D5CB182008A8EBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6FAC29852D5CB182008A8EBB /* Game_App.app */,
+				6FAC29852D5CB182008A8EBB /* Wood Game.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -48,9 +48,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		6FAC29842D5CB182008A8EBB /* Game_App */ = {
+		6FAC29842D5CB182008A8EBB /* Wood Game */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6FAC29932D5CB183008A8EBB /* Build configuration list for PBXNativeTarget "Game_App" */;
+			buildConfigurationList = 6FAC29932D5CB183008A8EBB /* Build configuration list for PBXNativeTarget "Wood Game" */;
 			buildPhases = (
 				6FAC29812D5CB182008A8EBB /* Sources */,
 				6FAC29822D5CB182008A8EBB /* Frameworks */,
@@ -63,11 +63,11 @@
 			fileSystemSynchronizedGroups = (
 				6FAC29872D5CB182008A8EBB /* Game_App */,
 			);
-			name = Game_App;
+			name = "Wood Game";
 			packageProductDependencies = (
 			);
 			productName = Game_App;
-			productReference = 6FAC29852D5CB182008A8EBB /* Game_App.app */;
+			productReference = 6FAC29852D5CB182008A8EBB /* Wood Game.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -85,7 +85,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 6FAC29802D5CB182008A8EBB /* Build configuration list for PBXProject "Game_App" */;
+			buildConfigurationList = 6FAC29802D5CB182008A8EBB /* Build configuration list for PBXProject "Wood Game" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -99,7 +99,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				6FAC29842D5CB182008A8EBB /* Game_App */,
+				6FAC29842D5CB182008A8EBB /* Wood Game */,
 			);
 		};
 /* End PBXProject section */
@@ -317,7 +317,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		6FAC29802D5CB182008A8EBB /* Build configuration list for PBXProject "Game_App" */ = {
+		6FAC29802D5CB182008A8EBB /* Build configuration list for PBXProject "Wood Game" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6FAC29912D5CB183008A8EBB /* Debug */,
@@ -326,7 +326,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6FAC29932D5CB183008A8EBB /* Build configuration list for PBXNativeTarget "Game_App" */ = {
+		6FAC29932D5CB183008A8EBB /* Build configuration list for PBXNativeTarget "Wood Game" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6FAC29942D5CB183008A8EBB /* Debug */,
