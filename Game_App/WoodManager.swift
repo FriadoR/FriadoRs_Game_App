@@ -16,6 +16,7 @@ class WoodManager: ObservableObject {
     @Published private(set) var question: AttributedString = ""
     @Published private(set) var answerChoices: [Answer] = []
     @Published private(set) var progress: CGFloat = 0.00
+    @Published private(set) var score = 0
     
     init() {
         Task.init {
@@ -40,6 +41,7 @@ class WoodManager: ObservableObject {
             DispatchQueue.main.async {
                 self.wood = decodedData.results
                 self.length = self.wood.count
+                self.setQuestion()
             }
             
         } catch {
@@ -50,8 +52,28 @@ class WoodManager: ObservableObject {
     func goToNextQuestion() {
         if index + 1 < length {
             index += 1
+            setQuestion()
         } else {
             reachedEnd = true
+        }
+    }
+    
+    func setQuestion() {
+        answerSelected = false
+        progress = CGFloat(Double(index + 1) / Double(length * 350))
+        
+        if index < length {
+            let currentWoodQuestion = wood[index]
+            question = currentWoodQuestion.formatedQuestion
+            answerChoices = currentWoodQuestion.answers
+            
+        }
+    }
+    func selectAnswer(answer: Answer) {
+        answerSelected = true
+        
+        if answer.isCorrect {
+            score += 1
         }
     }
 }
