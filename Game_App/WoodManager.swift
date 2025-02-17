@@ -39,6 +39,11 @@ class WoodManager: ObservableObject {
             let decodedData = try decoder.decode(Wood.self, from: data)
             
             DispatchQueue.main.async {
+                self.index = 0
+                self.score = 0
+                self.progress = 0.00
+                self.reachedEnd = false
+                
                 self.wood = decodedData.results
                 self.length = self.wood.count
                 self.setQuestion()
