@@ -25,7 +25,7 @@ class WoodManager: ObservableObject {
     }
     
     func fetchWood() async {
-        guard let url = URL(string: "https://jsonplaceholder.typicode.com/posts") else { fatalError( "Invalid URL") }
+        guard let url = URL(string: "https://opentdb.com/api.php?amount=10") else { fatalError( "Invalid URL") }
         
         let urlRequest = URLRequest(url: url)
         

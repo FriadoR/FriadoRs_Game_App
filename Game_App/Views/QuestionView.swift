@@ -18,26 +18,31 @@ struct QuestionView: View {
                 
                 Spacer()
                 
-                Text("1 out of 10")
+                Text("\(woodManager.index + 1) out of \(woodManager.length)")
                     .foregroundColor(.accentColor)
                     .fontWeight(.heavy)
             }
             
-            ProgressBar(progress: 10)
+            ProgressBar(progress: woodManager.progress)
             
             VStack(alignment: .leading, spacing: 20) {
-                Text("What is the most challenging monster in the Dungeons &amp; Dragons 5th Edition Monster Manual?")
+                Text(woodManager.question)
                     .font(.system(size: 20))
                     .bold()
                     .foregroundColor(Color(hue: 1.0, saturation: 0.0, brightness: 0.661))
                 
-                AnswerRow(answer: Answer(text: "false", isCorrect: true))
-                    .environmentObject(woodManager)
-                AnswerRow(answer: Answer(text: "true", isCorrect: false))
-                    .environmentObject(woodManager)
+                ForEach(woodManager.answerChoices, id: \.id) { answer in
+                    AnswerRow(answer: answer)
+                        .environmentObject(woodManager)
+                }
             }
             
-            PrimaryButton(text: "Next")
+            Button {
+                woodManager.goToNextQuestion()
+            } label: {
+                PrimaryButton(text: "Next", background: woodManager.answerSelected ? Color.accentColor : Color(hue: 1.0, saturation: 0.0, brightness: 0.564, opacity: 0.327))
+            }
+            .disabled(!woodManager.answerSelected)
             
             Spacer()
             
