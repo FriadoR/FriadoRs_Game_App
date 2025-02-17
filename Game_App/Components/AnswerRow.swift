@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct AnswerRow: View {
+    @EnvironmentObject var woodManager: WoodManager
     var answer: Answer
     @State private var isSelected: Bool = false
     
@@ -31,16 +32,20 @@ struct AnswerRow: View {
         }
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
-        .foregroundColor(isSelected ? Color.accentColor : .gray)
+        .foregroundColor(woodManager.answerSelected ? (isSelected ? Color.accentColor : .gray) : Color.accentColor)
         .background(Color.white)
         .cornerRadius(10)
         .shadow(color: isSelected ? (answer.isCorrect ? green : red) : .gray, radius: 5, x: 0.5, y: 0.5)
         .onTapGesture {
-            isSelected = true
+            if !woodManager.answerSelected {
+                isSelected = true
+                woodManager.selectAnswer(answer: answer)
+            }
         }
     }
 }
 
 #Preview {
     AnswerRow(answer: Answer(text: "Single", isCorrect: false))
+        .environmentObject(WoodManager())
 }

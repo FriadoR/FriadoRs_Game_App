@@ -8,11 +8,15 @@
 import SwiftUI
 
 struct WoodView: View {
+    @EnvironmentObject var woodManager: WoodManager
+    
     var body: some View {
         QuestionView()
+            .environmentObject(woodManager)
     }
 }
 
 #Preview {
     WoodView()
+        .environmentObject(WoodManager())
 }

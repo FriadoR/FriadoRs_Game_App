@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct QuestionView: View {
+    @EnvironmentObject var woodManager: WoodManager
+    
     var body: some View {
         VStack(spacing: 40) {
             HStack {
@@ -30,7 +32,9 @@ struct QuestionView: View {
                     .foregroundColor(Color(hue: 1.0, saturation: 0.0, brightness: 0.661))
                 
                 AnswerRow(answer: Answer(text: "false", isCorrect: true))
+                    .environmentObject(woodManager)
                 AnswerRow(answer: Answer(text: "true", isCorrect: false))
+                    .environmentObject(woodManager)
             }
             
             PrimaryButton(text: "Next")
@@ -47,4 +51,5 @@ struct QuestionView: View {
 
 #Preview {
     QuestionView()
+        .environmentObject(WoodManager())
 }
