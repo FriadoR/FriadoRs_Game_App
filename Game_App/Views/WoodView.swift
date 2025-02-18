@@ -19,7 +19,10 @@ struct WoodView: View {
                 
                 Text("Congratulations, you completed the game! 🎉")
                 
+                
+                
                 Text("Your scored \(woodManager.score) out of \(woodManager.length)")
+                
                 
                 Button {
                     Task.init {
@@ -29,10 +32,10 @@ struct WoodView: View {
                     PrimaryButton(text: "Play again?")
                 }
             }
-            .foregroundColor(Color.accentColor)
+            .foregroundColor(Color.textWood)
             .padding()
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color(red: 38/255, green: 92/255, blue: 75/255))
+            .background(.accentWood)
             
         } else {
             QuestionView()
