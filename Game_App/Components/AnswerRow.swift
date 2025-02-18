@@ -23,16 +23,22 @@ struct AnswerRow: View {
             Text(answer.text)
                 .bold()
             
-            if isSelected {
+            if woodManager.answerSelected {
                 Spacer()
                 
-                Image(systemName: answer.isCorrect ? "checkmark.circle.fill" : "xmark.circle.fill")
-                    .foregroundColor(answer.isCorrect ? green : red)
+                if answer.isCorrect {
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundColor(green)
+                }
+                else if !answer.isCorrect && isSelected {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundColor(red)
+                }
             }
         }
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
-        .foregroundColor(woodManager.answerSelected ? (isSelected ? Color.accentColor : .gray) : Color.accentColor)
+        .foregroundColor(woodManager.answerSelected ? (isSelected ? Color.textWood : .gray) : Color(hue: 1.0, saturation: 0.0, brightness: 0.661))
         .background(Color.white)
         .cornerRadius(10)
         .shadow(color: isSelected ? (answer.isCorrect ? green : red) : .gray, radius: 5, x: 0.5, y: 0.5)

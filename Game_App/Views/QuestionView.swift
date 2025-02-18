@@ -19,7 +19,7 @@ struct QuestionView: View {
                 Spacer()
                 
                 Text("\(woodManager.index + 1) out of \(woodManager.length)")
-                    .foregroundColor(.accentColor)
+                    .foregroundColor(.textWood)
                     .fontWeight(.heavy)
             }
             
@@ -40,7 +40,7 @@ struct QuestionView: View {
             Button {
                 woodManager.goToNextQuestion()
             } label: {
-                PrimaryButton(text: "Next", background: woodManager.answerSelected ? Color.accentColor : Color(hue: 1.0, saturation: 0.0, brightness: 0.564, opacity: 0.327))
+                PrimaryButton(text: "Next", background: woodManager.answerSelected ? Color(.accentWood) : Color(hue: 1.0, saturation: 0.0, brightness: 0.564, opacity: 0.327))
             }
             .disabled(!woodManager.answerSelected)
             
@@ -49,7 +49,7 @@ struct QuestionView: View {
         }
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(red: 38/255, green: 92/255, blue: 75/255))
+        .background(Color(.accentWood))
         .navigationBarHidden(true)
     }
 }

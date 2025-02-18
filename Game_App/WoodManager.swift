@@ -17,6 +17,7 @@ class WoodManager: ObservableObject {
     @Published private(set) var answerChoices: [Answer] = []
     @Published private(set) var progress: CGFloat = 0.00
     @Published private(set) var score = 0
+    @Published private(set) var showCorrectAnswer = false
     
     init() {
         Task.init {
@@ -58,6 +59,7 @@ class WoodManager: ObservableObject {
         if index + 1 < length {
             index += 1
             setQuestion()
+            showCorrectAnswer = false
         } else {
             reachedEnd = true
         }
@@ -79,6 +81,8 @@ class WoodManager: ObservableObject {
         
         if answer.isCorrect {
             score += 1
+        } else {
+            showCorrectAnswer = false
         }
     }
 }
