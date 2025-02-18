@@ -9,34 +9,36 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject private var woodManager = WoodManager()
+    @State private var showText = false
+    @State private var showButton = false
     
     var body: some View {
         NavigationStack {
-            VStack(spacing: 40) {
-                VStack(spacing: 20) {
-                    
-                    Text("Wood Game!")
-                        .customTitle()
-                    
-                    Text("Are you ready to test your wood skills?!")
-                        .font(.headline)
-                        .foregroundColor(Color("AccentColor"))
-                }
-                
+            ZStack {
+                Image("WoodImage")
+                    .resizable()
                 NavigationLink {
                     WoodView()
                         .environmentObject(woodManager)
                 } label: {
-                    PrimaryButton(text: "Start Game!") }
-                
+                    PrimaryButton(text: "Start Game")
+                        .opacity(showButton ? 1 : 0)
+                        .animation(.easeInOut(duration: 6), value: showButton)
+                        .padding(.bottom, 110)
+                }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .ignoresSafeArea(.all)
-            .background(Color(red: 38/255, green: 92/255, blue: 75/255)) // Color(hex: "#265C4B")
+            .onAppear {
+                withAnimation {
+                    showButton = true
+                }
+            }
         }
     }
 }
 
 #Preview {
     ContentView()
+        .environmentObject(WoodManager())
 }

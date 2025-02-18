@@ -14,7 +14,7 @@ struct WoodView: View {
         if woodManager.reachedEnd {
             VStack(spacing: 20) {
                 
-                Text("Вы прошли игру!")
+                Text("Game over!")
                     .customTitle()
                 
                 Text("Congratulations, you completed the game! 🎉")

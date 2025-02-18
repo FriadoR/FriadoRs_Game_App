@@ -9,16 +9,16 @@ import SwiftUI
 
 struct PrimaryButton: View {
     var text: String
-    var background: Color = Color("AccentColor")
+    var background: Color = Color("AccentWoodColor")
     
     var body: some View {
         Text(text)
-            .foregroundColor(.white)
+            .foregroundColor(Color(.textWood))
             .padding()
             .padding(.horizontal)
             .background(background)
             .cornerRadius(30)
-            .shadow(radius: 10)
+            .shadow(radius: 15)
     }
 }
 
