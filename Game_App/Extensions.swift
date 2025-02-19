@@ -15,3 +15,12 @@ extension Text {
             .foregroundColor(.textWood)
     }
 }
+extension View {
+    func customTitle() -> some View {
+        self
+            .font(.title)
+            .fontWeight(.heavy)
+            .foregroundColor(.textWood)
+    }
+}
+
