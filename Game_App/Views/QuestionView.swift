@@ -26,10 +26,23 @@ struct QuestionView: View {
             ProgressBar(progress: woodManager.progress)
             
             VStack(alignment: .leading, spacing: 20) {
-                Text(woodManager.question)
-                    .font(.system(size: 20))
-                    .bold()
-                    .foregroundColor(Color(hue: 1.0, saturation: 0.0, brightness: 0.661))
+                HStack {
+                       Text(woodManager.question)
+                           .font(.system(size: 20))
+                           .bold()
+                           .foregroundColor(Color(hue: 1.0, saturation: 0.0, brightness: 0.661))
+
+                       Text(woodManager.currentDifficulty)
+                           .font(.system(size: 16))
+                           .bold()
+                           .padding(8)
+                           .foregroundColor(.white)
+                           .background(
+                               // Используем switch или условия для выбора цвета
+                               RoundedRectangle(cornerRadius: 10)
+                                   .fill(self.difficultyColor(for: woodManager.currentDifficulty))
+                           )
+                   }
                 
                 ForEach(woodManager.answerChoices, id: \.id) { answer in
                     AnswerRow(answer: answer)
@@ -52,7 +65,22 @@ struct QuestionView: View {
         .background(Color(.accentWood))
         .navigationBarHidden(true)
     }
+    
+    private func difficultyColor(for difficulty: String) -> Color {
+        switch difficulty.lowercased() {
+        case "easy":
+            return Color.green
+        case "medium":
+            return Color.orange
+        case "hard":
+            return Color.red
+        default:
+            return Color.gray
+        }
+    }
 }
+
+
 
 #Preview {
     QuestionView()

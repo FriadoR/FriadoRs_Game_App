@@ -18,6 +18,7 @@ class WoodManager: ObservableObject {
     @Published private(set) var progress: CGFloat = 0.00
     @Published private(set) var score = 0
     @Published private(set) var showCorrectAnswer = false
+    @Published private(set) var currentDifficulty: String = ""
     
     init() {
         Task.init {
@@ -73,6 +74,7 @@ class WoodManager: ObservableObject {
             let currentWoodQuestion = wood[index]
             question = currentWoodQuestion.formatedQuestion
             answerChoices = currentWoodQuestion.answers
+            currentDifficulty = currentWoodQuestion.difficulty.capitalized
             
         }
     }
