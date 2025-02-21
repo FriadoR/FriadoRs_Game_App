@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import DotLottie
 
 struct ContentView: View {
     @StateObject private var woodManager = WoodManager()
@@ -21,10 +22,15 @@ struct ContentView: View {
                     LottieView()
                         .environmentObject(woodManager)
                 } label: {
-                    PrimaryButton(text: "Start Game")
-                        .opacity(showButton ? 1 : 0)
-                        .animation(.easeInOut(duration: 6), value: showButton)
-                        .padding(.bottom, 110)
+                    
+                    DotLottieAnimation(fileName: "start", config: AnimationConfig(autoplay: true, loop: true))
+                        .view()
+                        .frame(width: 220, height: 220)
+                        .offset(y: -30)
+//                    PrimaryButton(text: "Start Game")
+//                        .opacity(showButton ? 1 : 0)
+//                        .animation(.easeInOut(duration: 6), value: showButton)
+//                        .padding(.bottom, 110)
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
