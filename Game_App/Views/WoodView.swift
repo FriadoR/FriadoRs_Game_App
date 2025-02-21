@@ -12,30 +12,36 @@ struct WoodView: View {
     
     var body: some View {
         if woodManager.reachedEnd {
-            VStack(spacing: 20) {
-                
-                Text("Game over!")
-                    .customTitle()
-                
-                Text("Congratulations, you completed the game! 🎉")
-                
-                
-                
-                Text("Your scored \(woodManager.score) out of \(woodManager.length)")
-                
-                
-                Button {
-                    Task.init {
-                        await woodManager.fetchWood()
+            NavigationStack {
+                VStack(spacing: 20) {
+                    
+                    Text("Game over!")
+                        .customTitle()
+                    
+                    Text("Congratulations, you completed the game! 🎉")
+                    
+                    Text("Your scored \(woodManager.score) out of \(woodManager.length)")
+                    
+                    Button {
+                        Task.init {
+                            await woodManager.fetchWood()
+                        }
+                    } label: {
+                        PrimaryButton(text: "Play again?")
                     }
-                } label: {
-                    PrimaryButton(text: "Play again?")
+                    NavigationLink {
+                        ContentView()
+                            .environmentObject(woodManager)
+                    } label: {
+                        PrimaryButton(text: "Main menu")
+                            
+                    }
                 }
-            }
-            .foregroundColor(Color.textWood)
-            .padding()
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(.accentWood)
+                .foregroundColor(Color.textWood)
+                .padding()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(.accentWood)
+            }.navigationBarBackButtonHidden(true)
             
         } else {
             QuestionView()

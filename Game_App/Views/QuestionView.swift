@@ -27,22 +27,24 @@ struct QuestionView: View {
             
             VStack(alignment: .leading, spacing: 20) {
                 HStack {
-                       Text(woodManager.question)
-                           .font(.system(size: 20))
-                           .bold()
-                           .foregroundColor(Color(hue: 1.0, saturation: 0.0, brightness: 0.661))
-
-                       Text(woodManager.currentDifficulty)
-                           .font(.system(size: 16))
-                           .bold()
-                           .padding(8)
-                           .foregroundColor(.white)
-                           .background(
-                               // Используем switch или условия для выбора цвета
-                               RoundedRectangle(cornerRadius: 10)
-                                   .fill(self.difficultyColor(for: woodManager.currentDifficulty))
-                           )
-                   }
+                    Text(woodManager.question)
+                        .font(.system(size: 20))
+                        .bold()
+                        .foregroundColor(Color(hue: 1.0, saturation: 0.0, brightness: 0.661))
+                    
+                    Spacer()
+                    
+                    Text(woodManager.currentDifficulty)
+                        .font(.system(size: 16))
+                        .bold()
+                        .padding(8)
+                        .foregroundColor(.white)
+                        .background(
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(self.difficultyColor(for: woodManager.currentDifficulty))
+                        )
+                    
+                }
                 
                 ForEach(woodManager.answerChoices, id: \.id) { answer in
                     AnswerRow(answer: answer)

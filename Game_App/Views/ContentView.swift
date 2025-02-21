@@ -33,7 +33,7 @@ struct ContentView: View {
                 withAnimation {
                     showButton = true
                 }
-            }
+            }.navigationBarBackButtonHidden(true)
         }
     }
 }
