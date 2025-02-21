@@ -18,7 +18,7 @@ struct ContentView: View {
                 Image("WoodImage")
                     .resizable()
                 NavigationLink {
-                    WoodView()
+                    LottieView()
                         .environmentObject(woodManager)
                 } label: {
                     PrimaryButton(text: "Start Game")

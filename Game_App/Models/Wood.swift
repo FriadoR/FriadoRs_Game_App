@@ -25,7 +25,8 @@ struct Wood: Decodable {
         
         var formatedQuestion: AttributedString {
             do {
-                return try AttributedString(markdown: question)
+                let combinedText = "\(question)\n\(category)"
+                return try AttributedString(markdown: combinedText)
             } catch {
                 print("Error setting formatedQuestion: \(error)")
                 return ""

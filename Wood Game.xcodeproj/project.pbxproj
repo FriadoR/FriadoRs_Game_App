@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6F0D98802D68C34B0063C8B6 /* DotLottie in Frameworks */ = {isa = PBXBuildFile; productRef = 6F0D987F2D68C34B0063C8B6 /* DotLottie */; };
+		6F18FCBB2D68B18000220823 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 6F18FCBA2D68B18000220823 /* Lottie */; };
 		6F3296CD2D65BE020095C026 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 6F3296CC2D65BE020095C026 /* FirebaseAuth */; };
 /* End PBXBuildFile section */
 
@@ -28,6 +30,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				6F3296CD2D65BE020095C026 /* FirebaseAuth in Frameworks */,
+				6F18FCBB2D68B18000220823 /* Lottie in Frameworks */,
+				6F0D98802D68C34B0063C8B6 /* DotLottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,6 +75,8 @@
 			name = "Wood Game";
 			packageProductDependencies = (
 				6F3296CC2D65BE020095C026 /* FirebaseAuth */,
+				6F18FCBA2D68B18000220823 /* Lottie */,
+				6F0D987F2D68C34B0063C8B6 /* DotLottie */,
 			);
 			productName = Game_App;
 			productReference = 6FAC29852D5CB182008A8EBB /* Wood Game.app */;
@@ -102,6 +108,8 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				6F3296CB2D65BE020095C026 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				6FABC06C2D68A8CB009B1344 /* XCRemoteSwiftPackageReference "lottie-spm" */,
+				6F4CACA82D68BC1100CE72D8 /* XCRemoteSwiftPackageReference "dotlottie-ios" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6FAC29862D5CB182008A8EBB /* Products */;
@@ -355,9 +363,35 @@
 				minimumVersion = 11.8.1;
 			};
 		};
+		6F4CACA82D68BC1100CE72D8 /* XCRemoteSwiftPackageReference "dotlottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/LottieFiles/dotlottie-ios";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		6FABC06C2D68A8CB009B1344 /* XCRemoteSwiftPackageReference "lottie-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-spm.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.5.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		6F0D987F2D68C34B0063C8B6 /* DotLottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6F4CACA82D68BC1100CE72D8 /* XCRemoteSwiftPackageReference "dotlottie-ios" */;
+			productName = DotLottie;
+		};
+		6F18FCBA2D68B18000220823 /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6FABC06C2D68A8CB009B1344 /* XCRemoteSwiftPackageReference "lottie-spm" */;
+			productName = Lottie;
+		};
 		6F3296CC2D65BE020095C026 /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6F3296CB2D65BE020095C026 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;

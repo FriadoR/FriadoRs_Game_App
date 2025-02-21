@@ -27,28 +27,38 @@ struct QuestionView: View {
             
             VStack(alignment: .leading, spacing: 20) {
                 HStack {
-                    Text(woodManager.question)
+                    Text(woodManager.currentCategory)
                         .font(.system(size: 20))
                         .bold()
-                        .foregroundColor(Color(hue: 1.0, saturation: 0.0, brightness: 0.661))
-                    
-                    Spacer()
-                    
-                    Text(woodManager.currentDifficulty)
-                        .font(.system(size: 16))
-                        .bold()
-                        .padding(8)
-                        .foregroundColor(.white)
-                        .background(
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill(self.difficultyColor(for: woodManager.currentDifficulty))
-                        )
-                    
+                        .foregroundColor(Color.textWood)
                 }
                 
-                ForEach(woodManager.answerChoices, id: \.id) { answer in
-                    AnswerRow(answer: answer)
-                        .environmentObject(woodManager)
+                VStack(alignment: .leading, spacing: 20) {
+                    HStack {
+                        Text(woodManager.question)
+                            .font(.system(size: 20))
+                            .bold()
+                            .lineLimit(nil)
+                            .foregroundColor(Color(hue: 1.0, saturation: 0.0, brightness: 0.661))
+                        
+                        Spacer()
+                        
+                        Text(woodManager.currentDifficulty)
+                            .font(.system(size: 16))
+                            .bold()
+                            .padding(8)
+                            .foregroundColor(.white)
+                            .background(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .fill(self.difficultyColor(for: woodManager.currentDifficulty))
+                            )
+                        
+                    }
+                    
+                    ForEach(woodManager.answerChoices, id: \.id) { answer in
+                        AnswerRow(answer: answer)
+                            .environmentObject(woodManager)
+                    }
                 }
             }
             
