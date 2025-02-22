@@ -9,6 +9,8 @@ import SwiftUI
 
 struct WoodView: View {
     @EnvironmentObject var woodManager: WoodManager
+    @State private var selectedDifficulty: String = "easy"
+    @State private var selectedCategory: String = "11"
     
     var body: some View {
         if woodManager.reachedEnd {
@@ -16,33 +18,34 @@ struct WoodView: View {
                 VStack(spacing: 20) {
                     
                     Text("Game over!")
-                        .customTitle()
+                        .font(.title)
+                        .fontWeight(.bold)
                     
                     Text("Congratulations, you completed the game! 🎉")
                     
-                    Text("Your scored \(woodManager.score) out of \(woodManager.length)")
+                    Text("You scored \(woodManager.score) out of \(woodManager.length)")
                     
                     Button {
-                        Task.init {
-                            await woodManager.fetchWood()
+                        Task {
+                            await woodManager.fetchWood(category: selectedCategory, difficulty: selectedDifficulty)
                         }
                     } label: {
                         PrimaryButton(text: "Play again?")
                     }
+                    
                     NavigationLink {
                         ContentView()
                             .environmentObject(woodManager)
                     } label: {
                         PrimaryButton(text: "Main menu")
-                            
                     }
                 }
-                .foregroundColor(Color.textWood)
+                .foregroundColor(.white)
                 .padding()
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(.accentWood)
-            }.navigationBarBackButtonHidden(true)
-            
+                .woodBackground()
+            }
+            .navigationBarBackButtonHidden(true)
         } else {
             QuestionView()
                 .environmentObject(woodManager)

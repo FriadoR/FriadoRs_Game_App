@@ -29,19 +29,25 @@ struct AnswerRow: View {
                 if answer.isCorrect {
                     Image(systemName: "checkmark.circle.fill")
                         .foregroundColor(green)
+                        .transition(.scale)
                 }
                 else if !answer.isCorrect && isSelected {
                     Image(systemName: "xmark.circle.fill")
                         .foregroundColor(red)
+                        .transition(.scale)
                 }
             }
         }
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
         .foregroundColor(woodManager.answerSelected ? (isSelected ? Color.textWood : .gray) : Color(hue: 1.0, saturation: 0.0, brightness: 0.661))
-        .background(Color.white)
-        .cornerRadius(10)
-        .shadow(color: isSelected ? (answer.isCorrect ? green : red) : .gray, radius: 5, x: 0.5, y: 0.5)
+        .background(
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color.white)
+                .shadow(color: isSelected ? (answer.isCorrect ? green : red) : .gray, radius: 5, x: 0.5, y: 0.5)
+        )
+        .scaleEffect(isSelected ? 1.05 : 1.0)
+        .animation(.easeInOut(duration: 0.2), value: isSelected)
         .onTapGesture {
             if !woodManager.answerSelected {
                 isSelected = true

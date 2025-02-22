@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 class WoodManager: ObservableObject {
     private(set) var wood: [Wood.Result] = []
@@ -18,24 +19,28 @@ class WoodManager: ObservableObject {
     @Published private(set) var progress: CGFloat = 0.00
     @Published private(set) var score = 0
     @Published private(set) var showCorrectAnswer = false
-    @Published private(set) var currentDifficulty: String = ""
     @Published private(set) var currentCategory: String = ""
+    @Published private(set) var currentDifficulty: String = ""
     
-    init() {
-        Task.init {
-            await fetchWood()
+
+    // Default values for the first load
+    @Published var selectedDifficulty: String = "easy"
+    @Published var selectedCategory: String = "15" // Default category for "Books"
+    
+    // To handle fetching data with custom parameters
+    func fetchWood(category: String, difficulty: String) async {
+        guard let url = URL(string: "https://opentdb.com/api.php?amount=10&category=\(category)&difficulty=\(difficulty)") else {
+            fatalError("Invalid URL")
         }
-    }
-    
-    func fetchWood() async {
-        guard let url = URL(string: "https://opentdb.com/api.php?amount=10") else { fatalError( "Invalid URL") }
         
         let urlRequest = URLRequest(url: url)
         
         do {
             let (data, response) = try await URLSession.shared.data(for: urlRequest)
             
-            guard (response as? HTTPURLResponse)?.statusCode ?? 0 == 200 else { fatalError("Invalid HTTP response") }
+            guard (response as? HTTPURLResponse)?.statusCode ?? 0 == 200 else {
+                throw URLError(.badServerResponse)
+            }
             
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
@@ -46,7 +51,6 @@ class WoodManager: ObservableObject {
                 self.score = 0
                 self.progress = 0.00
                 self.reachedEnd = false
-                
                 self.wood = decodedData.results
                 self.length = self.wood.count
                 self.setQuestion()
@@ -56,17 +60,8 @@ class WoodManager: ObservableObject {
             print("Error fetching Wood: \(error)")
         }
     }
-    
-    func goToNextQuestion() {
-        if index + 1 < length {
-            index += 1
-            setQuestion()
-            showCorrectAnswer = false
-        } else {
-            reachedEnd = true
-        }
-    }
-    
+
+    // Set a new question
     func setQuestion() {
         answerSelected = false
         progress = CGFloat(Double(index + 1) / Double(length) * 350)
@@ -77,16 +72,36 @@ class WoodManager: ObservableObject {
             answerChoices = currentWoodQuestion.answers
             currentDifficulty = currentWoodQuestion.difficulty.capitalized
             currentCategory = currentWoodQuestion.category
-            
         }
     }
+    
+    // To call when selecting difficulty or category
+    func updateGameSettings(category: String, difficulty: String) {
+        selectedCategory = category
+        selectedDifficulty = difficulty
+        
+        
+        // Reload questions based on selected settings
+        Task {
+            await fetchWood(category: category, difficulty: difficulty)
+        }
+    }
+
+    // Go to next question
+    func goToNextQuestion() {
+        if index + 1 < length {
+            index += 1
+            setQuestion()
+            showCorrectAnswer = false
+        } else {
+            reachedEnd = true
+        }
+    }
+
     func selectAnswer(answer: Answer) {
         answerSelected = true
-        
         if answer.isCorrect {
             score += 1
-        } else {
-            showCorrectAnswer = false
         }
     }
 }

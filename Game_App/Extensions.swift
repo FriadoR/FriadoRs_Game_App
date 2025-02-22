@@ -23,4 +23,12 @@ extension View {
             .foregroundColor(.textWood)
     }
 }
+extension View {
+    func woodBackground() -> some View {
+        self.background(
+            LinearGradient(gradient: Gradient(colors: [Color("DACCB0"), Color("B9A888")]), startPoint: .top, endPoint: .bottom)
+                .edgesIgnoringSafeArea(.all)
+        )
+    }
+}
 

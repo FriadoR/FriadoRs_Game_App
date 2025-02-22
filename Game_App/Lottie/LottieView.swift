@@ -47,20 +47,18 @@ struct LottieView: View {
             .navigationDestination(isPresented: $navigateToWoodView) {
                 WoodView()
                     .environmentObject(woodManager)
-                    
+                
             }
         }
     }
     func startAnimationCycle() {
-        // Каждые 2 секунды (длительность одного цикла) увеличиваем счетчик
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             self.cycleCount += 1
             
-            // Если циклов прошло 5, переходим на следующий экран
             if self.cycleCount >= 3 {
                 navigateToWoodView = true
             } else {
-                startAnimationCycle() // Повторяем цикл
+                startAnimationCycle()
             }
         }
     }

@@ -19,7 +19,7 @@ struct ContentView: View {
                 Image("WoodImage")
                     .resizable()
                 NavigationLink {
-                    LottieView()
+                    DifficultySelectionView()
                         .environmentObject(woodManager)
                 } label: {
                     
@@ -27,10 +27,6 @@ struct ContentView: View {
                         .view()
                         .frame(width: 220, height: 220)
                         .offset(y: -30)
-//                    PrimaryButton(text: "Start Game")
-//                        .opacity(showButton ? 1 : 0)
-//                        .animation(.easeInOut(duration: 6), value: showButton)
-//                        .padding(.bottom, 110)
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)

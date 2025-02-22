@@ -74,8 +74,8 @@ struct QuestionView: View {
         }
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(.accentWood))
         .navigationBarHidden(true)
+        .woodBackground()
     }
     
     private func difficultyColor(for difficulty: String) -> Color {
