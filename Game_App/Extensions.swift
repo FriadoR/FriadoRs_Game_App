@@ -32,3 +32,13 @@ extension View {
     }
 }
 
+extension LinearGradient {
+    static func warmYellowGradient() -> LinearGradient {
+        return LinearGradient(gradient: Gradient(colors: [Color.orange.opacity(0.7), Color.yellow.opacity(0.7)]), startPoint: .topLeading, endPoint: .bottomTrailing)
+    }
+    
+    static func categoryButtonGradient() -> LinearGradient {
+        return LinearGradient(gradient: Gradient(colors: [Color.yellow, Color.orange]), startPoint: .topLeading, endPoint: .bottomTrailing)
+    }
+}
+
