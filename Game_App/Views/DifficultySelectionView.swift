@@ -10,11 +10,12 @@ import SwiftUI
 struct DifficultySelectionView: View {
     @EnvironmentObject var woodManager: WoodManager
     @State private var selectedDifficulty = "easy"
-    @State private var selectedCategory = "11" // Default category ID
+    @State private var selectedCategory = "11"
     @State private var showConfirmation = false
     @State private var selectedCategoryName = "Movies"
     @State private var showCategoryModal = false
-    @State private var showDifficultySelection = true // Для скрытия сложности после выбора
+    @State private var showDifficultySelection = true
+    @State private var isMixSelected = false
     
     let categories = [
         "Books": "15",
@@ -29,12 +30,9 @@ struct DifficultySelectionView: View {
     
     var body: some View {
         NavigationStack {
-            
             ZStack {
-                
                 VStack {
-                    // Select Difficulty section
-                    if showDifficultySelection {
+                    if showDifficultySelection && !isMixSelected {
                         Text("Select Difficulty")
                             .font(.title)
                             .foregroundColor(.white)
@@ -42,100 +40,109 @@ struct DifficultySelectionView: View {
                             .frame(height: 80)
                         
                         VStack(spacing: 20) {
-                            // Difficulty options
                             ForEach(["easy", "medium", "hard"], id: \.self) { difficulty in
-                                VStack {
-                                    Image(systemName: difficulty == "easy" ? "leaf.fill" : difficulty == "medium" ? "circle.fill" : "flame.fill")
-                                        .resizable()
-                                        .frame(width: 40, height: 40)
-                                        
-                                        .foregroundColor(selectedDifficulty == difficulty ? .white : .yellow)
-                                        
-                                        .padding()
-                                        .background(selectedDifficulty == difficulty ? Color.yellow : Color.gray.opacity(0.2))
-                                        .cornerRadius(12)
-                                        .shadow(radius: 5)
-                                    
-                                    Text(difficulty.capitalized)
-                                        .fontWeight(.semibold)
-                                        .foregroundColor(selectedDifficulty == difficulty ? .white : .yellow)
-                                }
-                                .frame(width: 170, height: 130) // Сделали прямоугольными и увеличили ширину
-                                .background(selectedDifficulty == difficulty ? Color.yellow : Color.gray.opacity(0.1))
-                                .cornerRadius(15)
-                                .onTapGesture {
+                                Button(action: {
                                     selectedDifficulty = difficulty
-                                    showCategoryModal = true // Показываем модальное окно для категорий
-                                    withAnimation { showDifficultySelection = false } // Скрыть сложности
+                                    showCategoryModal = true
+                                    withAnimation { showDifficultySelection = false }
+                                }) {
+                                    VStack {
+                                        Image(systemName: difficulty == "easy" ? "leaf.fill" : difficulty == "medium" ? "circle.fill" : "flame.fill")
+                                            .resizable()
+                                            .frame(width: 40, height: 40)
+                                            .foregroundColor(.white)
+                                            .padding()
+                                        
+                                        Text(difficulty.capitalized)
+                                            .fontWeight(.semibold)
+                                            .foregroundColor(.white)
+                                    }
+                                    .frame(width: 170, height: 130)
+                                    .background(
+                                        difficulty == "easy" ? Color.green :
+                                            difficulty == "medium" ? Color.orange :
+                                            Color.red
+                                    )
+                                    .cornerRadius(15)
+                                    .shadow(radius: 5)
                                 }
                             }
                             
-                            // Mix option
-                            VStack {
-                                Image(systemName: "shuffle")
-                                    .resizable()
-                                    .frame(width: 40, height: 40)
-                                    .foregroundColor(selectedDifficulty == "mix" ? .white : .yellow)
-                                    .padding()
-                                    .background(selectedDifficulty == "mix" ? Color.yellow : Color.gray.opacity(0.2))
-                                    .cornerRadius(12)
-                                    .shadow(radius: 5)
-                                
-                                Text("Mix")
-                                    .fontWeight(.semibold)
-                                    .foregroundColor(selectedDifficulty == "mix" ? .white : .yellow)
-                            }
-                            .frame(width: 150, height: 150) // Прямоугольная кнопка Mix
-                            .background(selectedDifficulty == "mix" ? Color.blue : Color.gray.opacity(0.1))
-                            .cornerRadius(12)
-                            .onTapGesture {
-                                selectedDifficulty = "mix"
-                                // Здесь можно добавить логику для микса вопросов
-                                showCategoryModal = true // Показываем модальное окно для категорий
-                                withAnimation { showDifficultySelection = false } // Скрыть сложности
+                            // Mix option (without category selection)
+                            Button(action: {
+                                isMixSelected = true
+                                showConfirmation = true
+                                showDifficultySelection = false
+                            }) {
+                                VStack {
+                                    Image(systemName: "shuffle")
+                                        .resizable()
+                                        .frame(width: 40, height: 40)
+                                        .foregroundColor(.white)
+                                        .padding()
+                                    
+                                    Text("Mix")
+                                        .fontWeight(.semibold)
+                                        .foregroundColor(.white)
+                                }
+                                .frame(width: 170, height: 130)
+                                .background(Color.blue)
+                                .cornerRadius(15)
+                                .shadow(radius: 5)
                             }
                         }
                         .padding()
-
                     }
                     
-                    // Confirmation Dialog
+                    // Confirmation Dialog for both Mix and selected difficulty + category
                     if showConfirmation {
                         VStack {
-                            Text("You selected \(selectedCategoryName) with \(selectedDifficulty) difficulty")
+                            Text(isMixSelected ? "You selected Mix with random questions" : "You selected \(selectedDifficulty.capitalized) difficulty and \(selectedCategoryName) category")
                                 .font(.title2)
-                                .foregroundColor(.blue)
+                                .foregroundColor(.textWood)
                                 .padding()
                             
                             HStack {
-                                // Убираем onTapGesture, используй чисто NavigationLink
+                                // Start the game with selected difficulty and category (or mix)
                                 NavigationLink {
                                     LottieView()
                                         .environmentObject(woodManager)
                                 } label: {
-                                    Text("Start Quiz")
-                                        .padding()
-                                        .background(Color.blue)
+                                    Text("Start")
+                                        .frame(width: 150, height: 50)
+                                        .background(Color.green)
                                         .foregroundColor(.white)
                                         .cornerRadius(10)
                                         .shadow(radius: 5)
                                         .onAppear {
-                                            // Debug: Выводим информацию о категории перед запросом
-                                            print("Starting quiz with category: \(selectedCategoryName), ID: \(selectedCategory), Difficulty: \(selectedDifficulty)")
-                                            
-                                            // Запускаем загрузку с правильной категорией
-                                            Task {
-                                                await woodManager.fetchWood(category: selectedCategory, difficulty: selectedDifficulty)
+                                            // Debug: Logging information
+                                            if isMixSelected {
+                                                print("Starting game with random questions (Mix)")
+                                                Task {
+                                                    await woodManager.fetchWoodMix() // Start loading random questions
+                                                }
+                                            } else {
+                                                print("Starting game with \(selectedDifficulty) difficulty and \(selectedCategoryName) category")
+                                                Task {
+                                                    await woodManager.fetchWood(category: selectedCategory, difficulty: selectedDifficulty)
+                                                }
                                             }
                                         }
                                 }
                                 
                                 Button(action: {
+                                    // Reset the state and go back to the difficulty selection
                                     showConfirmation = false
-                                    withAnimation { showDifficultySelection = true }
+                                    if isMixSelected {
+                                        // Reset for Mix and go back to difficulty selection
+                                        isMixSelected = false
+                                        withAnimation { showDifficultySelection = true }
+                                    } else {
+                                        withAnimation { showCategoryModal = true }
+                                    }
                                 }) {
                                     Text("Cancel")
-                                        .padding()
+                                        .frame(width: 150, height: 50)
                                         .background(Color.gray)
                                         .foregroundColor(.white)
                                         .cornerRadius(10)
@@ -146,53 +153,46 @@ struct DifficultySelectionView: View {
                         .frame(width: 300)
                         .padding()
                         .background(Color.white)
-                        .cornerRadius(10)
+                        .cornerRadius(15)
                         .shadow(radius: 10)
                     }
                 }
                 
-                // Custom Modal for selecting category
+                // Custom Modal for selecting category (only for non-Mix selection)
                 if showCategoryModal {
                     VStack {
                         Spacer()
                         
                         ZStack {
-                            // Градиентный фон с теплой желтой темой
-                            LinearGradient(gradient: Gradient(colors: [Color.orange.opacity(0.7), Color.yellow.opacity(0.7)]), startPoint: .topLeading, endPoint: .bottomTrailing)
+                            LinearGradient.warmYellowGradient()
                                 .edgesIgnoringSafeArea(.all)
                                 .cornerRadius(10)
                             
                             VStack {
                                 Text("Select Category")
                                     .font(.title)
-                                    .foregroundColor(.white) // Цвет текста
+                                    .foregroundColor(.white)
                                     .padding()
-                                    .background(
-                                        LinearGradient(gradient: Gradient(colors: [Color.yellow, Color.orange]), startPoint: .topLeading, endPoint: .bottomTrailing)
-                                    ) // Градиентный фон для текста
-                                    .cornerRadius(10) // Округленные углы для красивого эффекта
-                                    .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 4) // Тень для текста
+                                    .background(LinearGradient.categoryButtonGradient())
+                                    .cornerRadius(10)
+                                    .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 4)
                                 
-                                
-                                // Используем LazyVGrid для отображения категорий по 3 штуки в ряд
                                 LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
                                     ForEach(categories.keys.sorted(), id: \.self) { category in
                                         Button(action: {
-                                            selectedCategory = categories[category]! // Получаем ID категории
+                                            selectedCategory = categories[category]! // Taken ID category
                                             selectedCategoryName = category
                                             showConfirmation = true
                                             withAnimation { showCategoryModal = false }
                                         }) {
                                             Text(category)
-                                                .font(.headline) // Увеличиваем шрифт для лучшей читаемости
+                                                .font(.headline)
                                                 .padding()
-                                                .background(
-                                                    LinearGradient(gradient: Gradient(colors: [Color.yellow, Color.orange]), startPoint: .topLeading, endPoint: .bottomTrailing)
-                                                ) // Градиент для кнопки
+                                                .background(LinearGradient.categoryButtonGradient())
                                                 .foregroundColor(.white)
                                                 .cornerRadius(10)
-                                                .frame(minWidth: 120, minHeight: 60) // Увеличиваем размер кнопок, чтобы текст не выходил
-                                                .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 4) // Тень для кнопок
+                                                .frame(minWidth: 120, minHeight: 60)
+                                                .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 4)
                                         }
                                         .padding(.bottom, 10)
                                     }
@@ -208,7 +208,7 @@ struct DifficultySelectionView: View {
                                         .background(Color.gray)
                                         .foregroundColor(.white)
                                         .cornerRadius(10)
-                                        .frame(minWidth: 120, minHeight: 60) // Такой же размер, как у других кнопок
+                                        .frame(minWidth: 120, minHeight: 60)
                                         .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 4)
                                 }
                                 .padding(.top, 10)
@@ -228,11 +228,10 @@ struct DifficultySelectionView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .ignoresSafeArea(.all)
             .woodBackground()
+            .navigationBarBackButtonHidden(true)
         }
     }
 }
-
-
 
 #Preview {
     DifficultySelectionView()
