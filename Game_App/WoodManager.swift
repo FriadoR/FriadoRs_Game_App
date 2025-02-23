@@ -22,12 +22,11 @@ class WoodManager: ObservableObject {
     @Published private(set) var currentCategory: String = ""
     @Published private(set) var currentDifficulty: String = ""
     
-
     // Default values for the first load
     @Published var selectedDifficulty: String = "easy"
     @Published var selectedCategory: String = "15" // Default category for "Books"
     
-    // To handle fetching data with custom parameters
+    // Fetch questions with specific category and difficulty
     func fetchWood(category: String, difficulty: String) async {
         guard let url = URL(string: "https://opentdb.com/api.php?amount=10&category=\(category)&difficulty=\(difficulty)") else {
             fatalError("Invalid URL")
@@ -60,7 +59,41 @@ class WoodManager: ObservableObject {
             print("Error fetching Wood: \(error)")
         }
     }
-
+    
+    // Fetch random questions (mix)
+    func fetchWoodMix() async {
+        guard let url = URL(string: "https://opentdb.com/api.php?amount=10") else {
+            fatalError("Invalid URL")
+        }
+        
+        let urlRequest = URLRequest(url: url)
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(for: urlRequest)
+            
+            guard (response as? HTTPURLResponse)?.statusCode ?? 0 == 200 else {
+                throw URLError(.badServerResponse)
+            }
+            
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            let decodedData = try decoder.decode(Wood.self, from: data)
+            
+            DispatchQueue.main.async {
+                self.index = 0
+                self.score = 0
+                self.progress = 0.00
+                self.reachedEnd = false
+                self.wood = decodedData.results
+                self.length = self.wood.count
+                self.setQuestion()
+            }
+            
+        } catch {
+            print("Error fetching random Wood: \(error)")
+        }
+    }
+    
     // Set a new question
     func setQuestion() {
         answerSelected = false
@@ -80,13 +113,12 @@ class WoodManager: ObservableObject {
         selectedCategory = category
         selectedDifficulty = difficulty
         
-        
         // Reload questions based on selected settings
         Task {
             await fetchWood(category: category, difficulty: difficulty)
         }
     }
-
+    
     // Go to next question
     func goToNextQuestion() {
         if index + 1 < length {
@@ -97,7 +129,7 @@ class WoodManager: ObservableObject {
             reachedEnd = true
         }
     }
-
+    
     func selectAnswer(answer: Answer) {
         answerSelected = true
         if answer.isCorrect {
