@@ -26,26 +26,15 @@ class WoodManager: ObservableObject {
     @Published var selectedDifficulty: String = "easy"
     @Published var selectedCategory: String = "15" // Default category for "Books"
     
+    // Creating an instance of APIService
+    private let apiService = APIService()
+    
     // Fetch questions with specific category and difficulty
     func fetchWood(category: String, difficulty: String) async {
-        guard let url = URL(string: "https://opentdb.com/api.php?amount=10&category=\(category)&difficulty=\(difficulty)") else {
-            fatalError("Invalid URL")
-        }
-        
-        let urlRequest = URLRequest(url: url)
-        
         do {
-            let (data, response) = try await URLSession.shared.data(for: urlRequest)
+            let decodedData = try await apiService.fetchWood(category: category, difficulty: difficulty)
             
-            guard (response as? HTTPURLResponse)?.statusCode ?? 0 == 200 else {
-                throw URLError(.badServerResponse)
-            }
-            
-            let decoder = JSONDecoder()
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
-            let decodedData = try decoder.decode(Wood.self, from: data)
-            
-            DispatchQueue.main.async {
+            Task { @MainActor in
                 self.index = 0
                 self.score = 0
                 self.progress = 0.00
@@ -54,7 +43,6 @@ class WoodManager: ObservableObject {
                 self.length = self.wood.count
                 self.setQuestion()
             }
-            
         } catch {
             print("Error fetching Wood: \(error)")
         }
@@ -62,24 +50,10 @@ class WoodManager: ObservableObject {
     
     // Fetch random questions (mix)
     func fetchWoodMix() async {
-        guard let url = URL(string: "https://opentdb.com/api.php?amount=10") else {
-            fatalError("Invalid URL")
-        }
-        
-        let urlRequest = URLRequest(url: url)
-        
         do {
-            let (data, response) = try await URLSession.shared.data(for: urlRequest)
+            let decodedData = try await apiService.fetchWoodMix()
             
-            guard (response as? HTTPURLResponse)?.statusCode ?? 0 == 200 else {
-                throw URLError(.badServerResponse)
-            }
-            
-            let decoder = JSONDecoder()
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
-            let decodedData = try decoder.decode(Wood.self, from: data)
-            
-            DispatchQueue.main.async {
+            Task { @MainActor in
                 self.index = 0
                 self.score = 0
                 self.progress = 0.00
@@ -88,7 +62,6 @@ class WoodManager: ObservableObject {
                 self.length = self.wood.count
                 self.setQuestion()
             }
-            
         } catch {
             print("Error fetching random Wood: \(error)")
         }
