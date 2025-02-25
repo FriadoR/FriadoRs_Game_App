@@ -25,7 +25,8 @@ struct DifficultySelectionView: View {
         "History": "23",
         "Sports": "21",
         "Cars": "28",
-        "Animals": "27"
+        "Animals": "27",
+        "Geography": "22"
     ]
     
     var body: some View {
@@ -97,10 +98,11 @@ struct DifficultySelectionView: View {
                     // Confirmation Dialog for both Mix and selected difficulty + category
                     if showConfirmation {
                         VStack {
-                            Text(isMixSelected ? "You selected Mix with random questions" : "You selected \(selectedDifficulty.capitalized) difficulty and \(selectedCategoryName) category")
+                            Text(isMixSelected ? "You selected Mix with random questions" : "You selected \(selectedDifficulty.capitalized) and \(selectedCategoryName) category")
                                 .font(.title2)
                                 .foregroundColor(.textWood)
                                 .padding()
+                            
                             
                             HStack {
                                 // Start the game with selected difficulty and category (or mix)
@@ -152,7 +154,7 @@ struct DifficultySelectionView: View {
                         }
                         .frame(width: 300)
                         .padding()
-                        .background(Color.white)
+                        .background(LinearGradient.categoryButtonGradient())
                         .cornerRadius(15)
                         .shadow(radius: 10)
                     }
@@ -177,7 +179,7 @@ struct DifficultySelectionView: View {
                                     .cornerRadius(10)
                                     .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 4)
                                 
-                                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
+                                LazyVGrid(columns: [GridItem(.fixed(110)), GridItem(.fixed(110)), GridItem(.fixed(90))], spacing: 20) {
                                     ForEach(categories.keys.sorted(), id: \.self) { category in
                                         Button(action: {
                                             selectedCategory = categories[category]! // Taken ID category

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import DotLottie
 
 struct WoodView: View {
     @EnvironmentObject var woodManager: WoodManager
@@ -16,6 +17,10 @@ struct WoodView: View {
         if woodManager.reachedEnd {
             NavigationStack {
                 VStack(spacing: 20) {
+                    
+                    DotLottieAnimation(fileName: "theEnd", config: AnimationConfig(autoplay: true, loop: true))
+                        .view()
+                        .frame(width: 220, height: 220)
                     
                     Text("Game over!")
                         .font(.title)
@@ -41,7 +46,7 @@ struct WoodView: View {
                     }
                 }
                 .foregroundColor(.white)
-                .padding()
+                .padding(.bottom, 170)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .woodBackground()
             }

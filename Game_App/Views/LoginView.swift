@@ -7,6 +7,7 @@
 
 import SwiftUI
 import FirebaseAuth
+import DotLottie
 
 struct LoginView: View {
     @State private var email = ""
@@ -14,7 +15,11 @@ struct LoginView: View {
     @State private var isLoggedIn = false
     @State private var errorMessage = ""
     @State private var navigateToContentView = false
+    @State private var showAlertError = false
+    
     var background: Color = Color("AccentWoodColor")
+    private var isButtonEnabled: Bool { !email.isEmpty && !password.isEmpty }
+    
     
     var body: some View {
         NavigationStack {
@@ -23,7 +28,7 @@ struct LoginView: View {
                 
                 VStack(spacing: 10) {
                     
-                    Text("Welcome, Guest")
+                    Text("Welcome")
                         .customTitle()
                         .padding(.bottom, 10)
                     
@@ -46,8 +51,7 @@ struct LoginView: View {
                             .padding()
                             .frame(width: 260)
                             .foregroundColor(Color(.textWood))
-                            .background(background)
-                            .background(Color.blue)
+                            .background(isButtonEnabled ? background : Color(.gray.opacity(0.3)))
                             .cornerRadius(30)
                             .shadow(radius: 15)
                     }

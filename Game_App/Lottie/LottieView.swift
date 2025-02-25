@@ -8,7 +8,6 @@
 import SwiftUI
 import DotLottie
 
-
 struct LottieView: View {
     @EnvironmentObject var woodManager: WoodManager
     @State private var navigateToWoodView = false
@@ -16,7 +15,6 @@ struct LottieView: View {
     @State private var cycleCount = 0
     
     var body: some View {
-        
         NavigationStack {
             VStack {
                 DotLottieAnimation(fileName: "loading", config: AnimationConfig(autoplay: true, loop: true))
