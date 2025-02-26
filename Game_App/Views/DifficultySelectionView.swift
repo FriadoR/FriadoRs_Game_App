@@ -11,11 +11,13 @@ struct DifficultySelectionView: View {
     @EnvironmentObject var woodManager: WoodManager
     @State private var selectedDifficulty = "easy"
     @State private var selectedCategory = "11"
-    @State private var showConfirmation = false
     @State private var selectedCategoryName = "Movies"
     @State private var showCategoryModal = false
     @State private var showDifficultySelection = true
     @State private var isMixSelected = false
+    @State private var showConfirmation = false
+    @Environment(\.verticalSizeClass) var verticalSizeClass
+    @GestureState private var dragOffset = CGSize.zero
     
     let categories = [
         "Books": "15",
@@ -72,8 +74,9 @@ struct DifficultySelectionView: View {
                             // Mix option (without category selection)
                             Button(action: {
                                 isMixSelected = true
-                                showConfirmation = true
+                                showCategoryModal = false
                                 showDifficultySelection = false
+                                showConfirmation = true
                             }) {
                                 VStack {
                                     Image(systemName: "shuffle")
@@ -102,7 +105,6 @@ struct DifficultySelectionView: View {
                                 .font(.title2)
                                 .foregroundColor(.textWood)
                                 .padding()
-                            
                             
                             HStack {
                                 // Start the game with selected difficulty and category (or mix)
@@ -160,77 +162,59 @@ struct DifficultySelectionView: View {
                     }
                 }
                 
-                // Custom Modal for selecting category (only for non-Mix selection)
+                // Modal for selecting category
                 if showCategoryModal {
                     VStack {
-                        Spacer()
-                        
-                        ZStack {
-                            LinearGradient.warmYellowGradient()
-                                .edgesIgnoringSafeArea(.all)
-                                .cornerRadius(10)
-                            
-                            VStack {
-                                Text("Select Category")
-                                    .font(.title)
-                                    .foregroundColor(.white)
-                                    .padding()
-                                    .background(LinearGradient.categoryButtonGradient())
-                                    .cornerRadius(10)
-                                    .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 4)
-                                
-                                LazyVGrid(columns: [GridItem(.fixed(110)), GridItem(.fixed(110)), GridItem(.fixed(90))], spacing: 20) {
-                                    ForEach(categories.keys.sorted(), id: \.self) { category in
-                                        Button(action: {
-                                            selectedCategory = categories[category]! // Taken ID category
-                                            selectedCategoryName = category
-                                            showConfirmation = true
-                                            withAnimation { showCategoryModal = false }
-                                        }) {
+                        ScrollView(.horizontal) {
+                            HStack {
+                                ForEach(categories.keys.sorted(), id: \.self) { category in
+                                    Circle()
+                                        .frame(width: 350, height: 300)
+                                        .overlay(
                                             Text(category)
+                                                .foregroundColor(.white)
                                                 .font(.headline)
                                                 .padding()
-                                                .background(LinearGradient.categoryButtonGradient())
-                                                .foregroundColor(.white)
-                                                .cornerRadius(10)
-                                                .frame(minWidth: 120, minHeight: 60)
-                                                .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 4)
+                                        )
+                                        .foregroundStyle(LinearGradient(colors: [.yellow, .red], startPoint: .top, endPoint: .bottom))
+                                        .padding(.horizontal, 16)
+                                        .onTapGesture {
+                                            selectedCategory = categories[category]!
+                                            selectedCategoryName = category
+                                            // When a category is selected, show the confirmation screen
+                                            withAnimation {
+                                                showCategoryModal = false
+                                                showConfirmation = true
+                                            }
                                         }
-                                        .padding(.bottom, 10)
-                                    }
+                                        .containerRelativeFrame(.horizontal, count: verticalSizeClass == .regular ? 1 : 4, spacing: 16)
+                                        .scrollTransition { content, phase in
+                                            content
+                                                .opacity(phase.isIdentity ? 1.0 : 0.0)
+                                                .scaleEffect(x: phase.isIdentity ? 1.0 : 0.3, y: phase.isIdentity ? 1.0 : 0.3)
+                                                .offset(y: phase.isIdentity ? 0 : 50)
+                                        }
                                 }
-                                .padding()
-                                
-                                Button(action: {
-                                    withAnimation { showCategoryModal = false }
-                                    withAnimation { showDifficultySelection = true }
-                                }) {
-                                    Text("Cancel")
-                                        .padding()
-                                        .background(Color.gray)
-                                        .foregroundColor(.white)
-                                        .cornerRadius(10)
-                                        .frame(minWidth: 120, minHeight: 60)
-                                        .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 4)
-                                }
-                                .padding(.top, 10)
                             }
-                            .padding()
                         }
-                        .frame(width: 350, height: 590)
-                        .cornerRadius(20)
-                        .transition(.move(edge: .bottom))
+                        .padding()
                     }
-                    .frame(width: 350, height: 550)
-                    .background(Color.black.opacity(0.4).edgesIgnoringSafeArea(.all))
                     .transition(.opacity)
-                    .cornerRadius(20)
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(LinearGradient.warmYellowGradient())
             .ignoresSafeArea(.all)
-            .woodBackground()
             .navigationBarBackButtonHidden(true)
+            // Add the tap gesture to dismiss the ScrollView when tapping outside
+            .onTapGesture {
+                if showCategoryModal {
+                    withAnimation {
+                        showCategoryModal = false
+                        showDifficultySelection = true
+                    }
+                }
+            }
         }
     }
 }
@@ -239,3 +223,4 @@ struct DifficultySelectionView: View {
     DifficultySelectionView()
         .environmentObject(WoodManager())
 }
+
