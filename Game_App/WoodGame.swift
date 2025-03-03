@@ -22,12 +22,17 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 struct YourApp: App {
     // register app delegate for Firebase setupa
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    @AppStorage("log_status") private var logStatus: Bool = false
     
     
     var body: some Scene {
         WindowGroup {
             NavigationView {
-                LoginView()
+                if logStatus {
+                    ContentView() // Main View
+                } else {
+                    LoginView() // Enter View
+                }
             }
         }
     }

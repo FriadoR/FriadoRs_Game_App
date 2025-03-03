@@ -25,99 +25,103 @@ struct LoginView: View {
     
     @AppStorage("log_status") private var logStatus: Bool = false
     
-    var background: Color = Color("AccentWoodColor")
+    var background: Image = Image("LoginViewImage")
     
     
     
     var body: some View {
         NavigationStack {
-            List {
-                Section {
-                    TextField("Email Address", text: $emailAddress)
-                        .keyboardType(.emailAddress)
-                        .customTextFieldStyle("person")
-                    
-                    SecureField("Password", text: $password)
-                        .customTextFieldStyle("person", 0, activeTab == .login ? 10 : 0)
-                    
-                    if activeTab == .signUp {
-                        SecureField("Re-enter Password", text: $reEnterPassword)
-                            .customTextFieldStyle("person", 0, activeTab != .login ? 10 : 0)
-                    }
-                    
-                } header: {
-                    Picker("", selection: $activeTab) {
-                        ForEach(Tab.allCases, id: \.rawValue) {
-                            Text($0.rawValue)
-                                .tag($0)
+                List {
+                    Section {
+                        TextField("Email Address", text: $emailAddress)
+                            .keyboardType(.emailAddress)
+                            .customTextFieldStyle("person")
+                        
+                        SecureField("Password", text: $password)
+                            .customTextFieldStyle("person", 0, activeTab == .login ? 10 : 0)
+                        
+                        if activeTab == .signUp {
+                            SecureField("Re-enter Password", text: $reEnterPassword)
+                                .customTextFieldStyle("person", 0, activeTab != .login ? 10 : 0)
                         }
-                    }
-                    .pickerStyle(.segmented)
-                    .listRowInsets(.init(top: 15, leading: 0, bottom: 15, trailing: 0))
-                    .listRowSeparator(.hidden)
-                    
-                } footer: {
-                    VStack(alignment: .trailing, spacing: 12, content: {
-                        if activeTab == .login {
-                            Button("Forgot Password?") {
-                                showResetAlert = true
+                        
+                    } header: {
+                        Picker("", selection: $activeTab) {
+                            ForEach(Tab.allCases, id: \.rawValue) {
+                                Text($0.rawValue)
+                                    .tag($0)
                             }
-                            .font(.caption)
-                            .tint(Color("AccentWoodColor"))
-                            
                         }
-                        Button(action: loginAndSignUp, label: {
-                            HStack(spacing: 12) {
-                                Text(activeTab == .login ? "Login" : "Create Account")
+                        .pickerStyle(.segmented)
+                        .listRowInsets(.init(top: 15, leading: 0, bottom: 15, trailing: 0))
+                        .listRowSeparator(.hidden)
+                        
+                    } footer: {
+                        VStack(alignment: .trailing, spacing: 12, content: {
+                            if activeTab == .login {
+                                Button("Forgot Password?") {
+                                    showResetAlert = true
+                                }
+                                .font(.caption)
+                                .tint(Color("AccentWoodColor"))
                                 
-                                Image(systemName: "arrow.right")
-                                    .font(.callout)
                             }
-                            .padding(.horizontal, 10)
+                            Button(action: loginAndSignUp, label: {
+                                HStack(spacing: 12) {
+                                    Text(activeTab == .login ? "Login" : "Create Account")
+                                    
+                                    Image(systemName: "arrow.right")
+                                        .font(.callout)
+                                }
+                                .padding(.horizontal, 10)
+                            })
+                            
+                            .buttonStyle(.borderedProminent)
+                            .buttonBorderShape(.capsule)
+                            .showLoadingIndicator(isLoading)
+                            .disabled(ButtonStatus)
                         })
-                        .buttonStyle(.borderedProminent)
-                        .buttonBorderShape(.capsule)
-                        .showLoadingIndicator(isLoading)
-                        .disabled(ButtonStatus)
-                    })
-                    .frame(maxWidth: .infinity, alignment: .trailing)
-                    .listRowInsets(.init(top: 15, leading: 0, bottom: 0, trailing: 0))
+                        
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                        .listRowInsets(.init(top: 15, leading: 0, bottom: 0, trailing: 0))
+                        
+                    }
+                    
+                    .disabled(isLoading)
+                    
                 }
-                .disabled(isLoading)
+                
+                .animation(.snappy, value: activeTab)
+                .listStyle(.insetGrouped)
+                .navigationTitle("Welcome")
+                
             }
-            .animation(.snappy, value: activeTab)
-            .listStyle(.insetGrouped)
-            .navigationTitle("Welcome")
             
-        }
-        .sheet(isPresented: $showEmailVerificationView, content: {
-            emailVarificationView()
-                .presentationDetents([.height(350)])
-                .presentationCornerRadius(25)
-                .interactiveDismissDisabled()
+            .sheet(isPresented: $showEmailVerificationView, content: {
+                emailVarificationView()
+                    .presentationDetents([.height(350)])
+                    .presentationCornerRadius(25)
+                    .interactiveDismissDisabled()
+                
+            })
             
-        })
-        
-        .alert(alertMessage, isPresented: $isShowingAlert) { }
-        .alert("Reset Password", isPresented: $showResetAlert, actions: {
-            TextField("Email", text: $resetEmailAddress)
-                .padding()
-            Button("Send Reset Link", role: .destructive, action: sendResetLink)
-            Button("Cancel", role: .cancel) {
-                resetEmailAddress = ""
-            
+            .alert(alertMessage, isPresented: $isShowingAlert) { }
+            .alert("Reset Password", isPresented: $showResetAlert, actions: {
+                TextField("Email", text: $resetEmailAddress)
+                    .padding()
+                Button("Send Reset Link", role: .destructive, action: sendResetLink)
+                Button("Cancel", role: .cancel) {
+                    resetEmailAddress = ""
+                    
+                }
+            }, message: {
+                Text("Please enter your email address to reset your password.")
+                
+            })
+            .onChange(of: activeTab, initial: false) { oldValue, newValue in
+                password = ""
+                reEnterPassword = ""
             }
-        }, message: {
-            Text("Please enter your email address to reset your password.")
-            
-        })
-        .onChange(of: activeTab, initial: false) { oldValue, newValue in
-            password = ""
-            reEnterPassword = ""
-            
-            
-            
-        }
     }
     @ViewBuilder
     func emailVarificationView() -> some View {
@@ -143,7 +147,7 @@ struct LoginView: View {
                 // if let user = Auth.auth().currentUser {
                 // user.delete { in
                 // }
-            // }
+                // }
             }
             .padding(15)
         })
@@ -255,8 +259,8 @@ fileprivate extension View {
                     }
                 }
             }
+        }
     }
-}
 
 fileprivate extension View {
     @ViewBuilder

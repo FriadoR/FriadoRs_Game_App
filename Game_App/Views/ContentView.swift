@@ -7,6 +7,7 @@
 
 import SwiftUI
 import DotLottie
+import FirebaseAuth
 
 struct ContentView: View {
     @StateObject private var woodManager = WoodManager()
@@ -15,14 +16,6 @@ struct ContentView: View {
     @AppStorage("log_status") private var logStatus: Bool = false
     
     var body: some View {
-        
-        if logStatus {
-            // Home View
-            ContentView()
-        } else {
-            LoginView()
-        }
-        
         NavigationStack {
             ZStack {
                 Image("WoodImage")
@@ -36,6 +29,13 @@ struct ContentView: View {
                         .view()
                         .frame(width: 220, height: 220)
                         .offset(y: -30)
+                }.padding(.bottom, 60)
+                
+                Button {
+                    try? Auth.auth().signOut()
+                    logStatus = false
+                } label: {
+                    PrimaryButton(text: "Logout")
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
