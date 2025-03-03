@@ -12,8 +12,17 @@ struct ContentView: View {
     @StateObject private var woodManager = WoodManager()
     @State private var showText = false
     @State private var showButton = false
+    @AppStorage("log_status") private var logStatus: Bool = false
     
     var body: some View {
+        
+        if logStatus {
+            // Home View
+            ContentView()
+        } else {
+            LoginView()
+        }
+        
         NavigationStack {
             ZStack {
                 Image("WoodImage")
