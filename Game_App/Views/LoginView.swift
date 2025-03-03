@@ -10,99 +10,86 @@ import FirebaseAuth
 import DotLottie
 
 struct LoginView: View {
-    @State private var email = ""
-    @State private var password = ""
-    @State private var isLoggedIn = false
-    @State private var errorMessage = ""
-    @State private var navigateToContentView = false
-    @State private var showAlertError = false
+    @State private var activateTab: Tab = .login
+    @State private var emailAddress: String = ""
+    @State private var password: String = ""
+    @State private var reEnterPassword: String = ""
+    @State private var navigateToContentView: Bool = false
     
     var background: Color = Color("AccentWoodColor")
-    private var isButtonEnabled: Bool { !email.isEmpty && !password.isEmpty }
+    
     
     
     var body: some View {
         NavigationStack {
-            ZStack {
-                Image("LoginViewImage")
-                
-                VStack(spacing: 10) {
+            List {
+                Section {
+                    TextField("Email Address", text: $emailAddress)
+                        .keyboardType(.emailAddress)
+                        .customTextFieldStyle("person")
                     
-                    Text("Welcome")
-                        .customTitle()
-                        .padding(.bottom, 10)
-                    
-                    TextField("Email", text: $email)
-                        .padding()
-                        .disableAutocorrection(true)
-                        .frame(width: 270)
-                        .background(Color(.secondarySystemBackground))
-                        .cornerRadius(10)
-                    
-                    SecureField("Password", text: $password)
-                        .padding()
-                        .disableAutocorrection(true)
-                        .frame(width: 270)
-                        .background(Color(.secondarySystemBackground))
-                        .cornerRadius(10)
-                    
-                    Button(action: login) {
-                        Text("Enter")
-                            .padding()
-                            .frame(width: 260)
-                            .foregroundColor(Color(.textWood))
-                            .background(isButtonEnabled ? background : Color(.gray.opacity(0.3)))
-                            .cornerRadius(30)
-                            .shadow(radius: 15)
-                    }
-                    Button(action: register) {
-                        Text("Registration")
-                            .foregroundColor(Color(.textWood))
-                            .padding(.bottom)
-                    }
-                    NavigationLink("", destination: ContentView())
-                        .navigationDestination(isPresented: $navigateToContentView) {
-                            ContentView()
+                } header: {
+                    Picker("", selection: $activateTab) {
+                        ForEach(Tab.allCases, id: \.rawValue) {
+                            Text($0.rawValue)
+                                .tag($0)
                         }
-                        .hidden()
-                    if !errorMessage.isEmpty {
-                        Text(errorMessage)
-                            .foregroundColor(.red)
-                            .padding()
                     }
+                    .pickerStyle(.segmented)
+                    .listRowInsets(.init(top: 15, leading: 0, bottom: 0, trailing: 15))
+                    .listRowSeparator(.hidden)
+                    
+                } footer: {
+                    
                 }
-                .padding(.bottom, 50)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .ignoresSafeArea(.all)
             }
+            
+            
+            NavigationLink("", destination: ContentView())
+                .navigationDestination(isPresented: $navigateToContentView) {
+                    ContentView()
+                }
+                .hidden()
+                .navigationTitle("Welcome")
+                .navigationBarBackButtonHidden(true)
+            
+            
+            
         }
+        .padding(.bottom, 50)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .ignoresSafeArea(.all)
+        //                .background(background)
+        
+        
     }
-    
-    func login() {
-        Auth.auth().signIn(withEmail: email, password: password) { result, error in
-            if let error = error {
-                self.errorMessage = error.localizedDescription
-                print("Ошибка входа: \(error.localizedDescription)")
-            } else {
-                self.errorMessage = ""
-                self.isLoggedIn = true
-                self.navigateToContentView = true
-                print("Успешный вход")
-            }
-        }
+    enum Tab: String, CaseIterable {
+        case login = "Login"
+        case signUp = "Sing Up"
+        
     }
-    
-    func register() {
-        Auth.auth().createUser(withEmail: email, password: password) { result, error in
-            if let error = error {
-                self.errorMessage = error.localizedDescription
-                print("Ошибка регистрации: \(error.localizedDescription)")
-            } else {
-                self.errorMessage = ""
-                self.isLoggedIn = true
-                print("Регистрация прошла успешно")
+}
+
+fileprivate extension View {
+    @ViewBuilder
+    func customTextFieldStyle(_ icon: String? = nil, paddingTop: CGFloat = 0, _ paddingBottom: CGFloat = 0) -> some View {
+        HStack(spacing: 12) {
+            if let icon {
+                Image(systemName: icon)
+                    .foregroundColor(.gray)
+                    .font(.title3)
             }
+            self
         }
+        .padding(.horizontal, 15)
+        .padding(.vertical, 12)
+        .background(.bar, in: .rect(cornerRadius: 10))
+        .padding(.horizontal, 15)
+        .padding(.top, paddingTop)
+        .padding(.bottom, paddingBottom)
+        .listRowInsets(.init(top: 10, leading: 0, bottom: 0, trailing: 0))
+        .listRowSeparator(Visibility.hidden)
+        
     }
 }
 
