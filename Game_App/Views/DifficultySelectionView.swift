@@ -203,7 +203,7 @@ struct DifficultySelectionView: View {
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(LinearGradient.warmYellowGradient())
+            .background(LinearGradient.mainLoginCutomGradient())
             .ignoresSafeArea(.all)
             .navigationBarBackButtonHidden(true)
             // Add the tap gesture to dismiss the ScrollView when tapping outside

@@ -40,5 +40,9 @@ extension LinearGradient {
     static func categoryButtonGradient() -> LinearGradient {
         return LinearGradient(gradient: Gradient(colors: [Color.yellow, Color.orange]), startPoint: .topLeading, endPoint: .bottomTrailing)
     }
+    
+    static func mainLoginCutomGradient() -> LinearGradient {
+        return LinearGradient(gradient: Gradient(colors: [.blue, .purple]), startPoint: .topLeading, endPoint: .bottomTrailing)
+    }
 }
 
