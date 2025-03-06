@@ -11,24 +11,33 @@ struct ImageModel: Identifiable {
     var id: String = UUID().uuidString
     var altText: String
     var image: String
+    var categoryID: String
+    
 }
 
 let images: [ImageModel] = [
-    
-    
-    ]
+    .init(altText: "Books", image: "books", categoryID: ""),
+    .init(altText: "Movies", image: "movies", categoryID: ""),
+    .init(altText: "Video Games", image: "video_games", categoryID: ""),
+    .init(altText: "History", image: "history", categoryID: ""),
+    .init(altText: "Sports", image: "sports", categoryID: ""),
+    .init(altText: "Cars", image: "cars", categoryID: ""),
+    .init(altText: "Animals", image: "animals", categoryID: ""),
+    .init(altText: "Geography", image: "geography", categoryID: "")
+]
 
 struct DifficultySelectionView: View {
     @EnvironmentObject var woodManager: WoodManager
-    @State private var selectedDifficulty = "easy"
-    @State private var selectedCategory = "11"
-    @State private var selectedCategoryName = "Movies"
-    @State private var showCategoryModal = false
-    @State private var showDifficultySelection = true
-    @State private var isMixSelected = false
-    @State private var showConfirmation = false
+    @State internal var selectedDifficulty = "easy"
+    @State internal var selectedCategory: String
+    @State internal var selectedCategoryName: String
+    @State internal var showCategoryModal = false
+    @State internal var showDifficultySelection = true
+    @State internal var isMixSelected = false
+    @State internal var showConfirmation = false
     @Environment(\.verticalSizeClass) var verticalSizeClass
     @GestureState private var dragOffset = CGSize.zero
+    
     
     let categories = [
         "Books": "15",
@@ -41,6 +50,13 @@ struct DifficultySelectionView: View {
         "Animals": "27",
         "Geography": "22"
     ]
+    
+    var combinedImages: [ImageModel] {
+        images.compactMap { image in
+            guard let categoryID = categories[image.altText] else { return nil }
+            return ImageModel(altText: image.altText, image: image.image, categoryID: categoryID)
+        }
+    }
     
     var body: some View {
         NavigationStack {
@@ -172,67 +188,40 @@ struct DifficultySelectionView: View {
                         .shadow(radius: 10)
                     }
                 }
-                
-                // Modal for selecting category
-//                if showCategoryModal {
-//                    VStack {
-//                        ScrollView(.horizontal) {
-//                            HStack {
-//                                ForEach(categories.keys.sorted(), id: \.self) { category in
-//                                    Circle()
-//                                        .frame(width: 350, height: 300)
-//                                        .overlay(
-//                                            Text(category)
-//                                                .foregroundColor(.white)
-//                                                .font(.headline)
-//                                                .padding()
-//                                        )
-//                                        .foregroundStyle(LinearGradient(colors: [.yellow, .red], startPoint: .top, endPoint: .bottom))
-//                                        .padding(.horizontal, 16)
-//                                        .onTapGesture {
-//                                            selectedCategory = categories[category]!
-//                                            selectedCategoryName = category
-//                                            // When a category is selected, show the confirmation screen
-//                                            withAnimation {
-//                                                showCategoryModal = false
-//                                                showConfirmation = true
-//                                            }
-//                                        }
-//                                        .containerRelativeFrame(.horizontal, count: verticalSizeClass == .regular ? 1 : 4, spacing: 16)
-//                                        .scrollTransition { content, phase in
-//                                            content
-//                                                .opacity(phase.isIdentity ? 1.0 : 0.0)
-//                                                .scaleEffect(x: phase.isIdentity ? 1.0 : 0.3, y: phase.isIdentity ? 1.0 : 0.3)
-//                                                .offset(y: phase.isIdentity ? 0 : 50)
-//                                        }
-//                                }
-//                            }
-//                        }
-//                        .padding()
-//                    }
-//                    .transition(.opacity)
-//                }
-                NavigationStack {
-                    VStack {
-                        LoopingStack {
-                            ForEach(images) { image in
-                                Image(image.image)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: 250, height: 400)
-                                    .clipShape(.rect(cornerRadius: 30))
-                                    .padding(5)
-                                    .background {
-                                        RoundedRectangle(cornerRadius: 35)
-                                            .fill(.background)
+                if showCategoryModal {
+                    NavigationStack {
+                        VStack {
+                            Text("Choose a category")
+                                .font(.title)
+                                .padding()
+                                .foregroundStyle(.white)
+                            LoopingStack {
+                                ForEach(combinedImages) { image in
+                                    Image(image.image)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .frame(width: 250, height: 400)
+                                        .clipShape(.rect(cornerRadius: 30))
+                                        .padding(5)
+                                        .background {
+                                            RoundedRectangle(cornerRadius: 35)
+                                                .fill(.background)
+                                        }
+                                        .onTapGesture {
+                                            selectedCategory = image.categoryID
+                                            selectedCategoryName = image.altText
+                                            withAnimation {
+                                                showCategoryModal = false
+                                                showConfirmation = true
+                                        }
                                     }
-                                
-                                
+                                }
                             }
                         }
                     }
                 }
             }
+            
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(LinearGradient.mainLoginCutomGradient())
             .ignoresSafeArea(.all)
@@ -251,7 +240,7 @@ struct DifficultySelectionView: View {
 }
 
 #Preview {
-    DifficultySelectionView()
+    DifficultySelectionView(selectedCategory: "", selectedCategoryName: "")
         .environmentObject(WoodManager())
 }
 

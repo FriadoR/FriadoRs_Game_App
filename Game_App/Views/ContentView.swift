@@ -21,7 +21,7 @@ struct ContentView: View {
                 Image("WoodImage")
                     .resizable()
                 NavigationLink {
-                    DifficultySelectionView()
+                    DifficultySelectionView(selectedCategory: "", selectedCategoryName: "")
                         .environmentObject(woodManager)
                 } label: {
                     

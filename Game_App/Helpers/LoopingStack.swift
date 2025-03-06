@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-struct LoopingStack<Difficulty: View>: View {
-    var visibleCardsCount: Int = 1
-    @ViewBuilder var content: Difficulty
+struct LoopingStack<DifficultySelection: View>: View {
+    var visibleCardsCount: Int = 2
+    @ViewBuilder var content: DifficultySelection
     @State private var rotation: Int = 0
     
     var body: some View {
@@ -35,13 +35,13 @@ struct LoopingStack<Difficulty: View>: View {
     }
 }
 
-fileprivate struct LoopingStackCardView<Difficulty: View>: View {
+fileprivate struct LoopingStackCardView<DifficultySelection: View>: View {
     var index: Int
     var count: Int
     var visibleCardsCount: Int
     @Binding var rotation: Int
     
-    @ViewBuilder var content: Difficulty
+    @ViewBuilder var content: DifficultySelection
     @State private var offset: CGFloat = .zero
     // when dragging is finished result (to push into next card)
     @State private var isFinishedDragging: CGSize = .zero
@@ -57,7 +57,7 @@ fileprivate struct LoopingStackCardView<Difficulty: View>: View {
         let rotation = max(min(-offset / isFinishedDragging.width, 1), 0) * rotationDegree
         
         content
-            .onGeometryChange(for: CGSize.self, of : {
+            .onGeometryChange(for: CGSize.self, of: {
                 $0.size
             }, action: {
                 isFinishedDragging = $0
@@ -120,5 +120,5 @@ extension SubviewsCollection {
 }
 
 #Preview {
-    DifficultySelectionView()
+    DifficultySelectionView(selectedCategory: "", selectedCategoryName: "")
 }
