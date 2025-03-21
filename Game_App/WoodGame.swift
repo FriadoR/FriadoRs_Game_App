@@ -37,14 +37,3 @@ struct YourApp: App {
         }
     }
 }
-
-//import SwiftUI
-//
-//@main
-//struct WoodGame: App {
-//    var body: some Scene {
-//        WindowGroup {
-//            ContentView()
-//        }
-//    }
-//}

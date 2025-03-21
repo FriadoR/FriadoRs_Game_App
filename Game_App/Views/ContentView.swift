@@ -10,10 +10,12 @@ import DotLottie
 import FirebaseAuth
 
 struct ContentView: View {
-    @StateObject private var woodManager = WoodManager()
+    
     @State private var showText = false
     @State private var showButton = false
+    
     @AppStorage("log_status") private var logStatus: Bool = false
+    @StateObject private var woodManager = WoodManager()
     
     var body: some View {
         NavigationStack {
